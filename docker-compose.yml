@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  bicycle-service:
+    build: .
+    image: bicycle-location-service:latest
+    ports:
+      - '3020:3000'
+    networks:
+      - my-network
+    depends_on:
+      - mongo-map
+
+  mongo-map:
+    image: mongo:latest
+    ports:
+      - '27019:27017'
+    networks:
+      - my-network
+    environment:
+      MONGO_INITDB_DATABASE: bicycle-location-service
+    volumes:
+      - mongodb-data:/data/db
+
+networks:
+  my-network:
+    driver: bridge
+
+volumes:
+  mongodb-data:
